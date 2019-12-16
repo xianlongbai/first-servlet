@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>war</packaging>
+
+    <groupId>com.bxl</groupId>
+    <artifactId>first-servlet</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <dependencies>
+
+        <!-- servlet依赖的jar包start -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <!--tomcat中自带servlet-api包，所以打包是不需要放到WEB-INF下的lib中，所以需要指定为provided，
+            而jetty中不包含servlet-api包，所以打包时需要将其放在WEB-INF下的lib中，所以需要指定为compile（默认值）-->
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- jsp依赖jar包start -->
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+
+        <!--jstl标签依赖的jar包start -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+    </dependencies>
+
+
+    <build>
+        <plugins>
+
+            <!--Tomcat 插件-->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <path>/</path>
+                    <port>8085</port>
+                    <uriEncoding>UTF-8</uriEncoding>
+                    <server>tomcat</server>
+                </configuration>
+            </plugin>
+
+            <!--环境支持：Jdk 1.6+，Servlet 3.0，Tomcat 7+-->
+            <!--<plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>8.1.16.v20140903</version>
+                <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <webApp>
+                        <contextPath>/</contextPath>
+                    </webApp>
+                    <connectors>
+                        &lt;!&ndash; http配置 &ndash;&gt;
+                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+                            <port>8085</port>
+                        </connector>
+                        &lt;!&ndash; https配置 &ndash;&gt;
+                        &lt;!&ndash;<connector implementation="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
+                            <port>9443</port>
+                            <password>changeit</password>
+                        </connector>&ndash;&gt;
+                    </connectors>
+                    <stopKey/>
+                    <stopPort/>
+                </configuration>
+            </plugin>-->
+
+            <!--环境支持：Jdk 1.7+，Servlet 3.0+， Tomcat 8+-->
+            <!--<plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.4.20.v20190813</version>
+                <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <httpConnector>
+                        <port>8085</port>
+                    </httpConnector>
+                    <stopPort>8084</stopPort>
+                    <webApp>
+                        <contextPath>/</contextPath>
+                    </webApp>
+                </configuration>
+            </plugin>-->
+
+
+        </plugins>
+    </build>
+
+
+    
+</project>
