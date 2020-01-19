@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.*;
 
@@ -39,6 +40,7 @@ public class BxlDispatcherServlet extends HttpServlet {
         super();
     }
 
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //在doPost方法中再调用doDispach()方法
@@ -54,6 +56,29 @@ public class BxlDispatcherServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         this.doPost(req,resp);
     }
+
+
+    /**
+     * 当Servlet容器启动时，会调用GPDispatcherServlet的init()方法，从init方法的参数中，我们可以拿到主配置文件的路径，
+     * 从能够读取到配置文件中的信息。前面我们已经介绍了Spring的三个阶段，现在来完成初始化阶段的代码。
+     * @param config  是用来获取web.xml中配置的相关信息
+     * @throws ServletException
+     */
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        //1 、加载配置文件
+        this.doLoadConfig(config.getInitParameter(LOCATION));
+        //2、扫描所有相关的类
+        this.doScanPackages(prop.getProperty("scanPackage"));
+        //3、初始化所有相关类的实例，并保存到IOC容器中
+        this.doInstance();
+        //4、完成相关的依赖注入
+        this.doAutoWired();
+        //5、构造handlermapping
+        this.doRecordMapping();
+        System.out.println("bxlmvc framework is inited!");
+    }
+
 
     private void doDispatch(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (this.handlerMapping.isEmpty()) return;
@@ -100,31 +125,8 @@ public class BxlDispatcherServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
     }
 
-
-    /**
-     * 当Servlet容器启动时，会调用GPDispatcherServlet的init()方法，从init方法的参数中，我们可以拿到主配置文件的路径，
-     * 从能够读取到配置文件中的信息。前面我们已经介绍了Spring的三个阶段，现在来完成初始化阶段的代码。
-     * @throws ServletException
-     */
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        //1 、加载配置文件
-        this.doLoadConfig(config.getInitParameter(LOCATION));
-        //2、扫描所有相关的类
-        this.doScanPackages(prop.getProperty("scanPackage"));
-        //3、初始化所有相关类的实例，并保存到IOC容器中
-        this.doInstance();
-        //4、完成相关的依赖注入
-        this.doAutoWired();
-        //5、构造handlermapping
-        this.doRecordMapping();
-        System.out.println("bxlmvc framework is inited!");
-    }
 
     //doRecordMapping()方法，将BxlRequestMapping中配置的信息和Method进行关联，并保存这些关系。
     private void doRecordMapping() {
@@ -198,6 +200,7 @@ public class BxlDispatcherServlet extends HttpServlet {
                         continue;
                     }
                     //如果自己没有设置，就按接口类型创建一个
+                    Type[] genericInterfaces = clazz.getGenericInterfaces();
                     Class<?>[] interfaces = clazz.getInterfaces();
                     for (Class<?> i : interfaces) {
                         ioc.put(i.getName(),clazz.newInstance());

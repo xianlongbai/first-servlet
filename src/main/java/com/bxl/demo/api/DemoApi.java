@@ -19,6 +19,7 @@ public class DemoApi {
 
     @BxlRequestMapping("/findPassword")
     public void  findPassword(HttpServletRequest req, HttpServletResponse resp, @BxlRequestParam("name") String name) throws IOException {
+        //resp.setContentType("text/html;charset=UTF-8");
         String password = demoService.findPassword(name);
         if (password!=null){
             //todo。。。

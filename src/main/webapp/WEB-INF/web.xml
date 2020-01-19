@@ -14,7 +14,7 @@
         <url-pattern>/hello</url-pattern>
     </servlet-mapping>-->
 
-    <!--自定义DispatcherServlet-->
+    <!--自定义DispatcherServlet，同时指定要加载的properties或者xml配置文件-->
     <servlet>
         <servlet-name>bxlmvc</servlet-name>
         <servlet-class>com.bxl.mvcframework.BxlDispatcherServlet</servlet-class>
@@ -24,11 +24,28 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    
     <servlet-mapping>
         <servlet-name>bxlmvc</servlet-name>
         <!--用来转发所有的请求-->
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+
+    <!--编码过滤器，用来解决乱码问题-->
+    <filter>
+        <!-- 名字随便起，但是类要写完整的带包的路径-->
+        <filter-name>encodingFitler</filter-name>
+        <filter-class>com.bxl.demo.filter.EcondingFilter</filter-class>
+        <!-- 获取初始化的一些参数-->
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFitler</filter-name>
+        <!-- *表示匹配所有 -->
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
         
 </web-app>
