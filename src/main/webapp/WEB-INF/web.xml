@@ -14,4 +14,21 @@
         <url-pattern>/hello</url-pattern>
     </servlet-mapping>-->
 
+    <!--自定义DispatcherServlet-->
+    <servlet>
+        <servlet-name>bxlmvc</servlet-name>
+        <servlet-class>com.bxl.mvcframework.BxlDispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>application.properties</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>bxlmvc</servlet-name>
+        <!--用来转发所有的请求-->
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+        
 </web-app>

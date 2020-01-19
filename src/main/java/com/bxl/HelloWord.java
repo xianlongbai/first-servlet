@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/hello")
+//该注解用来代替再web.xml中的配置
+//@WebServlet("/hello")
 public class HelloWord extends HttpServlet {
 
     public void init() throws ServletException {
